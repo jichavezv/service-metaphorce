@@ -20,4 +20,24 @@ public class UserService {
     public  List<User> getAllUsers(){
         return userRepository.findAll();
     }
+    
+    public User getUserById(String idValue) {
+    	return this.userRepository.findById(idValue).get();
+    }
+    
+    public User updateUser(User userUpdated) {
+    	return this.userRepository.saveAndFlush(userUpdated);
+    }
+    
+    public boolean deleteUser(String idValue) {
+    	boolean flag = false;
+    	User userDelete = getUserById(idValue);
+    	
+    	if(userDelete != null) {
+    		this.userRepository.delete(userDelete);
+    		flag = true;
+    	}
+    	
+    	return flag;
+    }
 }
