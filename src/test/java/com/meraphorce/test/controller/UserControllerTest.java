@@ -1,6 +1,7 @@
 package com.meraphorce.test.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import com.meraphorce.controllers.UserController;
+import com.meraphorce.dto.ResponseDTO;
+import com.meraphorce.dto.UserDTO;
+import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.services.UserService;
 
@@ -23,6 +27,8 @@ public class UserControllerTest {
 	private UserService service;
 	
 	private User userTest;
+	
+	private UserMapper mapper = new UserMapper();
 		
 	@BeforeEach
 	public void setUp() {
@@ -32,15 +38,18 @@ public class UserControllerTest {
 				.email("user1@web.com")
 				.build();
 		
-		service.createUser(userTest);
+		service.createUser(this.mapper.toDTO(userTest));
 	}
 	
 	@Test
 	public void testGetUserById() {
-		ResponseEntity<User> data = controller.getUser(userTest.getId());
+		ResponseEntity<ResponseDTO<?>> data = controller.getUser(userTest.getId());
+		ResponseDTO<?> dto = data.getBody();
 		
 		assertNotNull(data);
-		assertEquals(data.getBody(), userTest);
+		assertNotNull(dto);
+		assertInstanceOf(UserDTO.class, dto.getObject());
+		assertEquals(((UserDTO) dto.getObject()).getUserId(), this.userTest.getId());
 	}
 	
 	@Test
@@ -48,18 +57,24 @@ public class UserControllerTest {
 		userTest.setName("User Updated");
 		userTest.setEmail("new.email@web.com");
 		
-		ResponseEntity<User> response = controller.updateUser(userTest);
+		ResponseEntity<ResponseDTO<?>> response = controller.updateUser(this.userTest.getId(), this.mapper.toDTO(userTest));
+		ResponseDTO<?> dto = response.getBody();
 		
 		assertNotNull(response);
-		assertEquals(response.getBody().getName(), "User Updated");
+		assertNotNull(dto);
+		assertInstanceOf(UserDTO.class, dto.getObject());
+		assertEquals(((UserDTO) dto.getObject()).getUserName(), this.userTest.getName());
 	}
 	
 	@Test
 	public void testDeleteUser() {
-		ResponseEntity<Boolean> response = controller.deleteUser(userTest.getId());
+		ResponseEntity<ResponseDTO<?>> response = controller.deleteUser(userTest.getId());
+		ResponseDTO<?> dto = response.getBody();
 		
 		assertNotNull(response);
-		assertTrue(response.getBody());
+		assertNotNull(dto);
+		assertInstanceOf(Boolean.class, dto.isStatus());
+		assertTrue(((boolean) dto.isStatus()));
 	}
 
 }

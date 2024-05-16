@@ -8,8 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.client.RestTemplate;
 
+import com.meraphorce.dto.UserDTO;
+import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.services.UserService;
 
@@ -21,6 +22,8 @@ public class UserServiceTest {
 	
 	private User userTest;
 	
+	private UserMapper mapper = new UserMapper();
+	
 	@BeforeEach
 	public void setUp() {
 		userTest = new User().builder()
@@ -29,17 +32,17 @@ public class UserServiceTest {
 				.email("user1@web.com")
 				.build();
 		
-		service.createUser(userTest);
+		service.createUser(this.mapper.toDTO(userTest));
 	}
 	
 	@Test
 	public void testGetUserById() {
-		User data = null;
+		UserDTO data = null;
 		
 		data = service.getUserById("user1");
 		
 		assertNotNull(data);
-		assertEquals(data, userTest);
+		assertEquals(data.getUserId(), userTest.getId());
 	}
 	
 	@Test
@@ -47,10 +50,10 @@ public class UserServiceTest {
 		userTest.setEmail("new.email@web.com");
 		userTest.setName("User Updated");
 		
-		User data = service.updateUser(userTest);
+		UserDTO data = service.updateUser(userTest.getId(), this.mapper.toDTO(userTest));
 		
 		assertNotNull(data);
-		assertEquals(data.getName(), userTest.getName());
+		assertEquals(data.getUserName(), userTest.getName());
 	}
 	
 	@Test
