@@ -15,5 +15,4 @@ public class ResponseDTO<T> {
 	private T object;
 	private String message;
 	private boolean status;
-
 }

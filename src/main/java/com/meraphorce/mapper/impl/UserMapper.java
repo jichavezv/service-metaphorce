@@ -25,5 +25,4 @@ public class UserMapper implements IMapper<User, UserDTO> {
 				.userEmail(entityValue.getEmail())
 				.build();
 	}
-
 }
