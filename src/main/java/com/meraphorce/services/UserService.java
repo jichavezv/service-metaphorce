@@ -2,8 +2,6 @@ package com.meraphorce.services;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +10,16 @@ import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.respositories.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
     
     private static UserMapper mapper = new UserMapper();
-    
-    Logger logger = LogManager.getLogger(UserService.class);
 
     public UserDTO createUser(UserDTO user) {
     	UserDTO newUser = null;
@@ -32,7 +31,7 @@ public class UserService {
 			newUser = mapper.toDTO(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to create user --> " + e);
+			log.warn("Error to create user --> " + e);
 		}
     	
         return newUser;
@@ -50,7 +49,7 @@ public class UserService {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to get all users --> " + e);
+			log.warn("Error to get all users --> " + e);
 		}
     	
         return list;
@@ -68,7 +67,7 @@ public class UserService {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to get user [" + idValue + "] --> " + e);
+			log.warn("Error to get user [" + idValue + "] --> " + e);
 		}
     	
     	return user;
@@ -85,7 +84,7 @@ public class UserService {
 			user = mapper.toDTO(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to update user [" + idValue + "] --> " + e);
+			log.warn("Error to update user [" + idValue + "] --> " + e);
 		}
     	
     	return user;
@@ -102,7 +101,7 @@ public class UserService {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to delete user [" + idValue + "] --> " + e);
+			log.warn("Error to delete user [" + idValue + "] --> " + e);
 		}
     }
 }
