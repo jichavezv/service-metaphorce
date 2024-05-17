@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import com.meraphorce.controllers.UserController;
-import com.meraphorce.dto.ResponseDTO;
 import com.meraphorce.dto.UserDTO;
 import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
@@ -43,13 +42,13 @@ public class UserControllerTest {
 	
 	@Test
 	public void testGetUserById() {
-		ResponseEntity<ResponseDTO<?>> data = controller.getUser(userTest.getId());
-		ResponseDTO<?> dto = data.getBody();
+		ResponseEntity<?> data = controller.getUser(userTest.getId());
+		Object dto = data.getBody();
 		
 		assertNotNull(data);
 		assertNotNull(dto);
-		assertInstanceOf(UserDTO.class, dto.getObject());
-		assertEquals(((UserDTO) dto.getObject()).getUserId(), this.userTest.getId());
+		assertInstanceOf(UserDTO.class, dto);
+		assertEquals(((UserDTO) dto).getUserId(), this.userTest.getId());
 	}
 	
 	@Test
@@ -57,24 +56,24 @@ public class UserControllerTest {
 		userTest.setName("User Updated");
 		userTest.setEmail("new.email@web.com");
 		
-		ResponseEntity<ResponseDTO<?>> response = controller.updateUser(this.userTest.getId(), this.mapper.toDTO(userTest));
-		ResponseDTO<?> dto = response.getBody();
+		ResponseEntity<?> response = controller.updateUser(this.userTest.getId(), this.mapper.toDTO(userTest));
+		Object dto = response.getBody();
 		
 		assertNotNull(response);
 		assertNotNull(dto);
-		assertInstanceOf(UserDTO.class, dto.getObject());
-		assertEquals(((UserDTO) dto.getObject()).getUserName(), this.userTest.getName());
+		assertInstanceOf(UserDTO.class, dto);
+		assertEquals(((UserDTO) dto).getUserName(), this.userTest.getName());
 	}
 	
 	@Test
 	public void testDeleteUser() {
-		ResponseEntity<ResponseDTO<?>> response = controller.deleteUser(userTest.getId());
-		ResponseDTO<?> dto = response.getBody();
+		ResponseEntity<?> response = controller.deleteUser(userTest.getId());
+		Object dto = response.getBody();
 		
 		assertNotNull(response);
 		assertNotNull(dto);
-		assertInstanceOf(Boolean.class, dto.isStatus());
-		assertTrue(((boolean) dto.isStatus()));
+		assertInstanceOf(Boolean.class, dto);
+		assertTrue(((boolean) dto));
 	}
 
 }
