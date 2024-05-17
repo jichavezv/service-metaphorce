@@ -91,8 +91,7 @@ public class UserService {
     	return user;
     }
     
-    public boolean deleteUser(String idValue) {
-    	boolean flag = false;
+    public void deleteUser(String idValue) {
     	User userDelete = null;
     	
     	try {
@@ -100,13 +99,10 @@ public class UserService {
 			
 			if(userDelete != null) {
 				this.userRepository.delete(userDelete);
-				flag = true;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.warn("Error to delete user [" + idValue + "] --> " + e);
 		}
-    	
-    	return flag;
     }
 }
