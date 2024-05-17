@@ -2,6 +2,7 @@ package com.meraphorce.test.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -58,8 +59,9 @@ public class UserServiceTest {
 	
 	@Test
 	public void testDeleteUser() {
-		boolean isDeleted = service.deleteUser(userTest.getId());
+		service.deleteUser(userTest.getId());
 		
-		assertTrue(isDeleted);
+		UserDTO userDeleted = service.getUserById(userTest.getId());
+		assertNull(userDeleted);
 	}
 }

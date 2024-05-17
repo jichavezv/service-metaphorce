@@ -3,12 +3,14 @@ package com.meraphorce.test.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
 import com.meraphorce.controllers.UserController;
@@ -68,12 +70,10 @@ public class UserControllerTest {
 	@Test
 	public void testDeleteUser() {
 		ResponseEntity<?> response = controller.deleteUser(userTest.getId());
-		Object dto = response.getBody();
 		
-		assertNotNull(response);
-		assertNotNull(dto);
-		assertInstanceOf(Boolean.class, dto);
-		assertTrue(((boolean) dto));
+		UserDTO userDeleted = service.getUserById(userTest.getId());
+		assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
+		assertNull(userDeleted);
 	}
 
 }
