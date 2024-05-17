@@ -28,9 +28,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO<?>> createUser(@RequestBody UserDTO user) {
     	ResponseEntity<ResponseDTO<?>> response = null;
     	ResponseDTO<?> responseDTO = null;
-    	UserDTO newUserData = null;
-    	
-    	newUserData = this.userService.createUser(user);
+    	UserDTO newUserData = this.userService.createUser(user);
     	
     	if(newUserData != null) {
     		responseDTO = ResponseDTO.builder()
@@ -53,9 +51,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO<?>> getAllUsers() {
     	ResponseEntity<ResponseDTO<?>> response = null;
     	ResponseDTO<?> responseDTO = null;
-    	List<UserDTO> listUsers = null;
-    	
-    	listUsers = this.userService.getAllUsers();
+    	List<UserDTO> listUsers = this.userService.getAllUsers();
     	
     	if(listUsers != null) {
     		responseDTO = ResponseDTO.builder()
@@ -78,9 +74,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO<?>> getUser(@PathVariable String id) {
     	ResponseEntity<ResponseDTO<?>> response = null;
     	ResponseDTO<?> responseDTO = null;
-    	UserDTO userData = null;
-    	
-    	userData = this.userService.getUserById(id);
+    	UserDTO userData = this.userService.getUserById(id);
     	
     	if(userData != null) {
     		responseDTO = ResponseDTO.builder()
@@ -103,9 +97,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO<?>> updateUser(@PathVariable String id, @RequestBody UserDTO user) {
     	ResponseEntity<ResponseDTO<?>> response = null;
     	ResponseDTO<?> responseDTO = null;
-    	UserDTO updateUserData = null;
-    	
-    	updateUserData = this.userService.updateUser(id, user);
+    	UserDTO updateUserData = this.userService.updateUser(id, user);
     	
     	if(updateUserData != null) {
     		responseDTO = ResponseDTO.builder()
@@ -128,9 +120,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO<?>> deleteUser(@PathVariable String id) {
     	ResponseEntity<ResponseDTO<?>> response = null;
     	ResponseDTO<?> responseDTO = null;
-    	boolean  isDeleted = false; 
-    	
-    	isDeleted = this.userService.deleteUser(id);
+    	boolean  isDeleted = this.userService.deleteUser(id);
     	
     	responseDTO = ResponseDTO.builder()
 				.message(isDeleted? "User deleted": "Error to delete User[" + id + "].")
