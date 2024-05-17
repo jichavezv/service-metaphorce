@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     
-    private UserMapper mapper = new UserMapper();
+    private static UserMapper mapper = new UserMapper();
     
     Logger logger = LogManager.getLogger(UserService.class);
 
@@ -28,8 +28,8 @@ public class UserService {
     	
     	
     	try {
-			data = this.userRepository.save(this.mapper.toEntity(user));
-			newUser = this.mapper.toDTO(data);
+			data = this.userRepository.save(mapper.toEntity(user));
+			newUser = mapper.toDTO(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.warn("Error to create user --> " + e);
@@ -46,7 +46,7 @@ public class UserService {
 			data = this.userRepository.findAll();
 			
 			if(data != null && !data.isEmpty()) {
-				list = data.stream().map(a -> mapper.toDTO(a)).toList();
+				list = data.stream().map(mapper::toDTO).toList();
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -64,7 +64,7 @@ public class UserService {
 			data = this.userRepository.findById(idValue).get();
 			
 			if(data != null) {
-				user = this.mapper.toDTO(data);
+				user = mapper.toDTO(data);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -81,8 +81,8 @@ public class UserService {
     	try {
 			userUpdated.setUserId(idValue);
 			
-			data = this.userRepository.saveAndFlush(this.mapper.toEntity(userUpdated));
-			user = this.mapper.toDTO(data);
+			data = this.userRepository.saveAndFlush(mapper.toEntity(userUpdated));
+			user = mapper.toDTO(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			logger.warn("Error to update user [" + idValue + "] --> " + e);
