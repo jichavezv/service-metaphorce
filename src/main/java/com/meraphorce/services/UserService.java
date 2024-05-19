@@ -140,4 +140,14 @@ public class UserService {
 			log.warn("Error to delete user [" + idValue + "] --> " + e);
 		}
     }
+    
+    /**
+     * Get all Users name in one transaction
+     * @return List of names
+     * @author Juan Chavez
+     * @since May/18/2024
+     */
+    public List<String> findAllUserNames() {
+    	return this.userRepository.getUserNames();
+    }
 }

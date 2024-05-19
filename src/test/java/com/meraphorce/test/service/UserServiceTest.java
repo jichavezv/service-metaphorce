@@ -1,9 +1,11 @@
 package com.meraphorce.test.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,5 +65,12 @@ public class UserServiceTest {
 		
 		UserDTO userDeleted = service.getUserById(userTest.getId());
 		assertNull(userDeleted);
+	}
+	
+	@Test
+	public void testGetUsersName() {
+		List<String> names = this.service.findAllUserNames();
+		
+		assertNotNull(names);
 	}
 }

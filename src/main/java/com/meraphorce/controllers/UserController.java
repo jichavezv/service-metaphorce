@@ -136,6 +136,13 @@ public class UserController {
 		return ResponseEntity.noContent().build();
 	}
 
+	/**
+	 * Implements HTTP POST to create multiple users  
+	 * @param batchUsers List of Users
+	 * @return Results for the bulk process
+	 * @author Juan Chavez
+	 * @since May/18/2024
+	 */
 	@PostMapping("/bulk-import")
 	public ResponseEntity<?> createUsersBulk(@RequestBody List<UserDTO> batchUsers) {
 		ResponseEntity<?> response = null;
@@ -166,6 +173,25 @@ public class UserController {
 			response = ResponseEntity.badRequest().body("Send a List of Users");
 		}
 
+		return response;
+	}
+	
+	/**
+	 * Implements HTTP Get to find the names of all users.
+	 * @return List of names
+	 * @author Juan Chavez
+	 * @since May/18/2024
+	 */
+	@GetMapping("/names")
+	public ResponseEntity<?> getUsersName() {
+		ResponseEntity<?> response = null;
+		List<String> names = this.userService.findAllUserNames();
+		
+		if(names != null && !names.isEmpty()) {
+			response = ResponseEntity.ok(names);
+		} else {
+			response = ResponseEntity.noContent().build();
+		}
 		return response;
 	}
 }

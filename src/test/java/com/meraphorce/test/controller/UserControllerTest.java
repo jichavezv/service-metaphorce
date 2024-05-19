@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,18 @@ public class UserControllerTest {
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertNotNull(dto);
 		assertInstanceOf(BulkResultDTO.class, dto);
+	}
+	
+	@Test
+	public void testGetUserNames() {
+		ResponseEntity<?> response = controller.getUsersName();
+		Object dto = response.getBody();
+		log.info("El DTO: " + dto);
+		
+		assertNotNull(response);
+		assertEquals(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(dto);
+		assertInstanceOf(List.class, dto);
 	}
 
 }

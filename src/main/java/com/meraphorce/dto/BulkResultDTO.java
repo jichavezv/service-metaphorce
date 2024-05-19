@@ -8,6 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Class to encapuslate the results for a Bulk process
+ * @author Juan Chavez
+ * @since May/18/2024
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
