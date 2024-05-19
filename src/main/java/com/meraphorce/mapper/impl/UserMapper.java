@@ -4,6 +4,11 @@ import com.meraphorce.dto.UserDTO;
 import com.meraphorce.mapper.IMapper;
 import com.meraphorce.models.User;
 
+/**
+ * Mapper class to convert User and UserDTO
+ * @author Juan Chavez
+ * @since May/14/2024
+ */
 public class UserMapper implements IMapper<User, UserDTO> {
 
 	@Override

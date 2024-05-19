@@ -12,6 +12,11 @@ import com.meraphorce.respositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service Layer to handle User Data
+ * @author Juan Chavez
+ * @since May/14/2024
+ */
 @Service
 @Slf4j
 public class UserService {
@@ -21,6 +26,13 @@ public class UserService {
     
     private static UserMapper mapper = new UserMapper();
 
+    /**
+     * Create a user from a DTO 
+     * @param user DTO with user data.
+     * @return User data inserted.
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public UserDTO createUser(UserDTO user) {
     	UserDTO newUser = null;
     	User data = null;
@@ -37,6 +49,12 @@ public class UserService {
         return newUser;
     }
 
+    /**
+     * Find all users from Database.
+     * @return List of users
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public List<UserDTO> getAllUsers() {
     	List<UserDTO> list = null;
     	List<User> data = null;
@@ -55,6 +73,13 @@ public class UserService {
         return list;
     }
     
+    /**
+     * Find a User by Id
+     * @param idValue User Id to find
+     * @return User Data
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public UserDTO getUserById(String idValue) {
     	UserDTO user = null;
     	User data = null;
@@ -73,6 +98,14 @@ public class UserService {
     	return user;
     }
     
+    /**
+     * Modify a User
+     * @param idValue User Id
+     * @param userUpdated User data to update
+     * @return User Data
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public UserDTO updateUser(String idValue, UserDTO userUpdated) {
     	UserDTO user = null;
     	User data = null;
@@ -90,6 +123,12 @@ public class UserService {
     	return user;
     }
     
+    /**
+     * Delete a user from database
+     * @param idValue User Id
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public void deleteUser(String idValue) {
     	User userDelete = null;
     	

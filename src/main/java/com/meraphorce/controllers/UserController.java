@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.meraphorce.dto.UserDTO;
 import com.meraphorce.services.UserService;
 
+/**
+ * Controller Class for endpoints defintion
+ * @author Juan Chavez
+ * @since May/14/2024
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -23,6 +28,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Implements the HTTP Post to create a User
+     * @param user User Data
+     * @return New user create
+     * @author Juan Chavez
+     * @since May/15/2024 
+     */
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
     	ResponseEntity<?> response = null;
@@ -37,6 +49,13 @@ public class UserController {
         return response;
     }
 
+    /**
+     * Implements the HTTP Get to find all users
+     * @return List of Users
+     * @return New user create
+     * @author Juan Chavez
+     * @since May/15/2024
+     */
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
     	ResponseEntity<?> response = null;
@@ -51,6 +70,14 @@ public class UserController {
         return response;
     }
     
+    /**
+     * Implements HTTP Get to find a user by id
+     * @param id User Id
+     * @return User data
+     * @return New user create
+     * @author Juan Chavez
+     * @since May/15/2024
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable String id) {
     	ResponseEntity<?> response = null;
@@ -65,6 +92,15 @@ public class UserController {
         return response; 
     }
     
+    /**
+     * Implements HTTP Put for update a user
+     * @param id User Id
+     * @param user User data to update
+     * @return User modified
+     * @return New user create
+     * @author Juan Chavez
+     * @since May/15/2024
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDTO user) {
     	ResponseEntity<?> response = null;
@@ -79,6 +115,14 @@ public class UserController {
     	return response;
     }
     
+    /**
+     * Implements HTTP Delete for delete a user
+     * @param id User Id
+     * @return Response
+     * @return New user create
+     * @author Juan Chavez
+     * @since May/15/2024
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable String id) {
     	this.userService.deleteUser(id);
