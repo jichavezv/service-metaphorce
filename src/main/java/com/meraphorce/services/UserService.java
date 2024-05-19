@@ -27,26 +27,23 @@ public class UserService {
     private static UserMapper mapper = new UserMapper();
 
     /**
-     * Create a user from a DTO 
-     * @param user DTO with user data.
+     * Create a user 
+     * @param user Entity data.
      * @return User data inserted.
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public UserDTO createUser(UserDTO user) {
-    	UserDTO newUser = null;
+    public User createUser(User user) {
     	User data = null;
     	
-    	
     	try {
-			data = this.userRepository.save(mapper.toEntity(user));
-			newUser = mapper.toDTO(data);
+			data = this.userRepository.save(user);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to create user --> " + e);
 		}
     	
-        return newUser;
+        return data;
     }
 
     /**

@@ -33,7 +33,7 @@ public class UserServiceTest {
 				.email("user1@web.com")
 				.build();
 		
-		service.createUser(this.mapper.toDTO(userTest));
+		service.createUser(userTest);
 	}
 	
 	@Test
