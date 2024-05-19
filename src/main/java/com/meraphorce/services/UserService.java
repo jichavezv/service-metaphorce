@@ -2,8 +2,6 @@ package com.meraphorce.services;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +10,29 @@ import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.respositories.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * Service Layer to handle User Data
+ * @author Juan Chavez
+ * @since May/14/2024
+ */
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
     
     private static UserMapper mapper = new UserMapper();
-    
-    Logger logger = LogManager.getLogger(UserService.class);
 
+    /**
+     * Create a user from a DTO 
+     * @param user DTO with user data.
+     * @return User data inserted.
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public UserDTO createUser(UserDTO user) {
     	UserDTO newUser = null;
     	User data = null;
@@ -32,12 +43,18 @@ public class UserService {
 			newUser = mapper.toDTO(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to create user --> " + e);
+			log.warn("Error to create user --> " + e);
 		}
     	
         return newUser;
     }
 
+    /**
+     * Find all users from Database.
+     * @return List of users
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public List<UserDTO> getAllUsers() {
     	List<UserDTO> list = null;
     	List<User> data = null;
@@ -50,12 +67,19 @@ public class UserService {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to get all users --> " + e);
+			log.warn("Error to get all users --> " + e);
 		}
     	
         return list;
     }
     
+    /**
+     * Find a User by Id
+     * @param idValue User Id to find
+     * @return User Data
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public UserDTO getUserById(String idValue) {
     	UserDTO user = null;
     	User data = null;
@@ -68,12 +92,20 @@ public class UserService {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to get user [" + idValue + "] --> " + e);
+			log.warn("Error to get user [" + idValue + "] --> " + e);
 		}
     	
     	return user;
     }
     
+    /**
+     * Modify a User
+     * @param idValue User Id
+     * @param userUpdated User data to update
+     * @return User Data
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
     public UserDTO updateUser(String idValue, UserDTO userUpdated) {
     	UserDTO user = null;
     	User data = null;
@@ -85,14 +117,19 @@ public class UserService {
 			user = mapper.toDTO(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to update user [" + idValue + "] --> " + e);
+			log.warn("Error to update user [" + idValue + "] --> " + e);
 		}
     	
     	return user;
     }
     
-    public boolean deleteUser(String idValue) {
-    	boolean flag = false;
+    /**
+     * Delete a user from database
+     * @param idValue User Id
+     * @author Juan Chavez
+     * @since May/14/2024
+     */
+    public void deleteUser(String idValue) {
     	User userDelete = null;
     	
     	try {
@@ -100,13 +137,10 @@ public class UserService {
 			
 			if(userDelete != null) {
 				this.userRepository.delete(userDelete);
-				flag = true;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			logger.warn("Error to delete user [" + idValue + "] --> " + e);
+			log.warn("Error to delete user [" + idValue + "] --> " + e);
 		}
-    	
-    	return flag;
     }
 }
