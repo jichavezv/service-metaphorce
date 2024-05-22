@@ -56,7 +56,7 @@ public class UserController {
 			response = ResponseEntity.ok(mapper.toDTO(newUser));
 			log.info("User created: " + newUser);
 		} else {
-			response = ResponseEntity.badRequest().body(userRequest);
+			response = ResponseEntity.badRequest().build();
 			log.info("Error to create User: " + userRequest);
 		}
 
@@ -130,7 +130,7 @@ public class UserController {
 			response = ResponseEntity.ok(mapper.toDTO(updateUserData));
 			log.info("User[" + id + "] updated");
 		} else {
-			response = ResponseEntity.badRequest().body(user);
+			response = ResponseEntity.badRequest().build();
 			log.info("User[" + id + "] not updated");
 		}
 
@@ -160,12 +160,12 @@ public class UserController {
 	 * @since May/18/2024
 	 */
 	@PostMapping("/bulk-import")
-	public ResponseEntity<?> createUsersBulk(@Valid @RequestBody List<UserDTO> batchUsers) {
-		ResponseEntity<?> response = null;
+	public ResponseEntity<BulkResultDTO<UserDTO>> createUsersBulk(@Valid @RequestBody List<UserDTO> batchUsers) {
+		ResponseEntity<BulkResultDTO<UserDTO>> response = null;
 
 		if(!batchUsers.isEmpty()) {
 			log.info("Create Users by Bulk: " + batchUsers.size());
-			BulkResultDTO dto = new BulkResultDTO();
+			BulkResultDTO<UserDTO> dto = new BulkResultDTO<UserDTO>();
 			User newUser = null;
 			List<User> created = new ArrayList<User>();
 			List<User> notCreated = new ArrayList<User>();
@@ -180,15 +180,15 @@ public class UserController {
 				};
 			}
 			
-			dto.setSuccess(created);
+			dto.setSuccess(created.stream().map(mapper::toDTO).toList());
 			log.info("Users created: " + created.size());
-			dto.setFailed(notCreated);
+			dto.setFailed(notCreated.stream().map(mapper::toDTO).toList());
 			log.info("Users failed: " + notCreated.size());
 			
 			response = ResponseEntity.ok(dto);
 		} else {
 			log.info("Invalid List of users");
-			response = ResponseEntity.badRequest().body("Send a List of Users");
+			response = ResponseEntity.badRequest().build();
 		}
 
 		return response;
@@ -201,8 +201,8 @@ public class UserController {
 	 * @since May/18/2024
 	 */
 	@GetMapping("/names")
-	public ResponseEntity<?> getUsersName() {
-		ResponseEntity<?> response = null;
+	public ResponseEntity<List<String>> getUsersName() {
+		ResponseEntity<List<String>> response = null;
 		List<String> names = this.userService.findAllUserNames();
 		
 		if(names != null && !names.isEmpty()) {
@@ -210,6 +210,7 @@ public class UserController {
 		} else {
 			response = ResponseEntity.noContent().build();
 		}
+		
 		return response;
 	}
 }

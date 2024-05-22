@@ -18,7 +18,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class BulkResultDTO {
-	private List<?> success;
-	private List<?> failed;
+public class BulkResultDTO<T> {
+	private List<T> success;
+	private List<T> failed;
 }
