@@ -22,8 +22,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    
-    private static UserMapper mapper = new UserMapper();
 
     /**
      * Create a user 

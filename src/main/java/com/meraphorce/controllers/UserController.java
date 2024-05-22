@@ -41,22 +41,22 @@ public class UserController {
 
 	/**
 	 * Implements the HTTP Post to create a User
-	 * @param user User Data
+	 * @param user Data to insert
 	 * @return New user create
 	 * @author Juan Chavez
 	 * @since May/15/2024 
 	 */
 	@PostMapping
-	public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userRequest) {
+	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userRequest) {
 		log.info("User to create: " + userRequest);
-		ResponseEntity<?> response = null;
+		ResponseEntity<UserDTO> response = null;
 		User newUser = this.userService.createUser(mapper.toEntity(userRequest));
 
 		if(newUser != null) {
 			response = ResponseEntity.ok(mapper.toDTO(newUser));
 			log.info("User created: " + newUser);
 		} else {
-			response = ResponseEntity.badRequest().body("Error to create User");
+			response = ResponseEntity.badRequest().body(userRequest);
 			log.info("Error to create User: " + userRequest);
 		}
 
@@ -66,21 +66,20 @@ public class UserController {
 	/**
 	 * Implements the HTTP Get to find all users
 	 * @return List of Users
-	 * @return New user create
 	 * @author Juan Chavez
 	 * @since May/15/2024
 	 */
 	@GetMapping
-	public ResponseEntity<?> getAllUsers() {
+	public ResponseEntity<List<UserDTO>> getAllUsers() {
 		log.info("Get All users ...");
-		ResponseEntity<?> response = null;
+		ResponseEntity<List<UserDTO>> response = null;
 		List<User> listUsers = this.userService.getAllUsers();
 
 		if(listUsers != null) {
 			log.info("Users[" + listUsers.size() + "]");
 			response = ResponseEntity.ok(listUsers.stream().map(mapper::toDTO).toList());
 		} else {
-			response = ResponseEntity.badRequest().body("Error to get all Users");
+			response = ResponseEntity.notFound().build();
 			log.info("Error to get all Users");
 		}
 
@@ -96,16 +95,16 @@ public class UserController {
 	 * @since May/15/2024
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getUser(@PathVariable String id) {
+	public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
 		log.info("Get User[" + id + "]");
-		ResponseEntity<?> response = null;
+		ResponseEntity<UserDTO> response = null;
 		User userData = this.userService.getUserById(id);
 
 		if(userData != null) {
 			response = ResponseEntity.ok(mapper.toDTO(userData));
 			log.info("User --> " + userData);
 		} else {
-			response = ResponseEntity.badRequest().body("Error to get User[" + id + "]");
+			response = ResponseEntity.notFound().build();
 			log.info("User[" + id + "] not found");
 		}
 
@@ -122,16 +121,16 @@ public class UserController {
 	 * @since May/15/2024
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody UserDTO user) {
+	public ResponseEntity<UserDTO> updateUser(@PathVariable String id, @Valid @RequestBody UserDTO user) {
 		log.info("User[" + id + "] to update: " + user);
-		ResponseEntity<?> response = null;
+		ResponseEntity<UserDTO> response = null;
 		User updateUserData = this.userService.updateUser(id, mapper.toEntity(user));
 
 		if(updateUserData != null) {
 			response = ResponseEntity.ok(mapper.toDTO(updateUserData));
 			log.info("User[" + id + "] updated");
 		} else {
-			response = ResponseEntity.badRequest().body("Error to update User[" + id + "]");
+			response = ResponseEntity.badRequest().body(user);
 			log.info("User[" + id + "] not updated");
 		}
 
@@ -147,7 +146,7 @@ public class UserController {
 	 * @since May/15/2024
 	 */
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable String id) {
+	public ResponseEntity<Void> deleteUser(@PathVariable String id) {
 		log.info("User[" + id + "] to delete");
 		this.userService.deleteUser(id);
 		return ResponseEntity.noContent().build();
