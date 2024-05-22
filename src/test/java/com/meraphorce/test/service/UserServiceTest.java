@@ -3,8 +3,10 @@ package com.meraphorce.test.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.meraphorce.models.User;
 import com.meraphorce.services.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
+@Slf4j
 public class UserServiceTest {
 	
 	@Autowired
@@ -33,10 +38,10 @@ public class UserServiceTest {
 	
 	@Test
 	public void testGetUserById() {
-		User data = service.getUserById(userTest.getId());
+		Optional<User> data = service.getUserById(userTest.getId());
 		
-		assertNotNull(data);
-		assertEquals(data.getId(), userTest.getId());
+		assertNotNull(data.get());
+		assertEquals(data.get().getId(), userTest.getId());
 	}
 	
 	@Test
@@ -54,8 +59,9 @@ public class UserServiceTest {
 	public void testDeleteUser() {
 		service.deleteUser(userTest.getId());
 		
-		User userDeleted = service.getUserById(userTest.getId());
-		assertNull(userDeleted);
+		Optional<User> userDeleted = service.getUserById(userTest.getId());
+		log.debug("User Delete: " + userDeleted);
+		assertTrue(userDeleted.isEmpty());
 	}
 	
 	@Test
