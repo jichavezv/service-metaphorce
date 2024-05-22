@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.meraphorce.dto.UserDTO;
 import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.respositories.UserRepository;
@@ -52,22 +51,17 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public List<UserDTO> getAllUsers() {
-    	List<UserDTO> list = null;
+    public List<User> getAllUsers() {
     	List<User> data = null;
     	
     	try {
 			data = this.userRepository.findAll();
-			
-			if(data != null && !data.isEmpty()) {
-				list = data.stream().map(mapper::toDTO).toList();
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to get all users --> " + e);
 		}
     	
-        return list;
+        return data;
     }
     
     /**
@@ -77,22 +71,17 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public UserDTO getUserById(String idValue) {
-    	UserDTO user = null;
+    public User getUserById(String idValue) {
     	User data = null;
     	
     	try {
 			data = this.userRepository.findById(idValue).get();
-			
-			if(data != null) {
-				user = mapper.toDTO(data);
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to get user [" + idValue + "] --> " + e);
 		}
     	
-    	return user;
+    	return data;
     }
     
     /**
@@ -103,21 +92,19 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public UserDTO updateUser(String idValue, UserDTO userUpdated) {
-    	UserDTO user = null;
+    public User updateUser(String idValue, User userUpdated) {
     	User data = null;
     	
     	try {
-			userUpdated.setUserId(idValue);
+			userUpdated.setId(idValue);
 			
-			data = this.userRepository.saveAndFlush(mapper.toEntity(userUpdated));
-			user = mapper.toDTO(data);
+			data = this.userRepository.saveAndFlush(userUpdated);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to update user [" + idValue + "] --> " + e);
 		}
     	
-    	return user;
+    	return data;
     }
     
     /**

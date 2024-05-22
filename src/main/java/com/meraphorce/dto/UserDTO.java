@@ -1,5 +1,9 @@
 package com.meraphorce.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +17,11 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
 	private String userId;
+	
+	@NotNull
+	@NotBlank
 	private String userName;
+	
+	@Email
 	private String userEmail;
 }

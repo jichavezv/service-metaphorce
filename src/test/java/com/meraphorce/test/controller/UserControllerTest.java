@@ -40,13 +40,10 @@ public class UserControllerTest {
 
 	@BeforeEach
 	public void setUp() {
-		userTest = new User().builder()
-				.id("user1")
+		userTest = service.createUser(new User().builder()
 				.name("User One")
 				.email("user1@web.com")
-				.build();
-
-		service.createUser(userTest);
+				.build());
 	}
 
 	@Test
@@ -78,7 +75,7 @@ public class UserControllerTest {
 	public void testDeleteUser() {
 		ResponseEntity<?> response = controller.deleteUser(userTest.getId());
 
-		UserDTO userDeleted = service.getUserById(userTest.getId());
+		User userDeleted = service.getUserById(userTest.getId());
 		assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
 		assertNull(userDeleted);
 	}
@@ -91,9 +88,8 @@ public class UserControllerTest {
 
 		for(int i=0; i<11; i++) {
 			bulkUser = new UserDTO().builder()
-					.userId("user" + i)
-					.userName("User One")
-					.userEmail("user1@web.com")
+					.userName("User " + i)
+					.userEmail("user_" + i + "@web.com")
 					.build();
 
 			list.add(bulkUser);

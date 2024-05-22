@@ -3,6 +3,8 @@ package com.meraphorce.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +22,8 @@ import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.services.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Controller Class for endpoints defintion
  * @author Juan Chavez
@@ -27,6 +31,7 @@ import com.meraphorce.services.UserService;
  */
 @RestController
 @RequestMapping("/api/v1/users")
+@Slf4j
 public class UserController {
 
 	@Autowired
@@ -42,15 +47,17 @@ public class UserController {
 	 * @since May/15/2024 
 	 */
 	@PostMapping
-	public ResponseEntity<?> createUser(@RequestBody UserDTO userRequest) {
+	public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userRequest) {
+		log.info("User to create: " + userRequest);
 		ResponseEntity<?> response = null;
-		User userData = mapper.toEntity(userRequest);
-		User newUser = this.userService.createUser(userData);
+		User newUser = this.userService.createUser(mapper.toEntity(userRequest));
 
 		if(newUser != null) {
 			response = ResponseEntity.ok(mapper.toDTO(newUser));
+			log.info("User created: " + newUser);
 		} else {
 			response = ResponseEntity.badRequest().body("Error to create User");
+			log.info("Error to create User: " + userRequest);
 		}
 
 		return response;
@@ -65,13 +72,16 @@ public class UserController {
 	 */
 	@GetMapping
 	public ResponseEntity<?> getAllUsers() {
+		log.info("Get All users ...");
 		ResponseEntity<?> response = null;
-		List<UserDTO> listUsers = this.userService.getAllUsers();
+		List<User> listUsers = this.userService.getAllUsers();
 
 		if(listUsers != null) {
-			response = ResponseEntity.ok(listUsers);
+			log.info("Users[" + listUsers.size() + "]");
+			response = ResponseEntity.ok(listUsers.stream().map(mapper::toDTO).toList());
 		} else {
 			response = ResponseEntity.badRequest().body("Error to get all Users");
+			log.info("Error to get all Users");
 		}
 
 		return response;
@@ -87,13 +97,16 @@ public class UserController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUser(@PathVariable String id) {
+		log.info("Get User[" + id + "]");
 		ResponseEntity<?> response = null;
-		UserDTO userData = this.userService.getUserById(id);
+		User userData = this.userService.getUserById(id);
 
 		if(userData != null) {
-			response = ResponseEntity.ok(userData);
+			response = ResponseEntity.ok(mapper.toDTO(userData));
+			log.info("User --> " + userData);
 		} else {
 			response = ResponseEntity.badRequest().body("Error to get User[" + id + "]");
+			log.info("User[" + id + "] not found");
 		}
 
 		return response; 
@@ -109,14 +122,17 @@ public class UserController {
 	 * @since May/15/2024
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDTO user) {
+	public ResponseEntity<?> updateUser(@PathVariable String id, @Valid @RequestBody UserDTO user) {
+		log.info("User[" + id + "] to update: " + user);
 		ResponseEntity<?> response = null;
-		UserDTO updateUserData = this.userService.updateUser(id, user);
+		User updateUserData = this.userService.updateUser(id, mapper.toEntity(user));
 
 		if(updateUserData != null) {
-			response = ResponseEntity.ok(updateUserData);
+			response = ResponseEntity.ok(mapper.toDTO(updateUserData));
+			log.info("User[" + id + "] updated");
 		} else {
 			response = ResponseEntity.badRequest().body("Error to update User[" + id + "]");
+			log.info("User[" + id + "] not updated");
 		}
 
 		return response;
@@ -132,6 +148,7 @@ public class UserController {
 	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteUser(@PathVariable String id) {
+		log.info("User[" + id + "] to delete");
 		this.userService.deleteUser(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -144,19 +161,18 @@ public class UserController {
 	 * @since May/18/2024
 	 */
 	@PostMapping("/bulk-import")
-	public ResponseEntity<?> createUsersBulk(@RequestBody List<UserDTO> batchUsers) {
+	public ResponseEntity<?> createUsersBulk(@Valid @RequestBody List<UserDTO> batchUsers) {
 		ResponseEntity<?> response = null;
 
 		if(!batchUsers.isEmpty()) {
+			log.info("Create Users by Bulk: " + batchUsers.size());
 			BulkResultDTO dto = new BulkResultDTO();
-			User userData = null;
 			User newUser = null;
 			List<User> created = new ArrayList<User>();
 			List<User> notCreated = new ArrayList<User>();
 
 			for(UserDTO element: batchUsers) {
-				userData = mapper.toEntity(element);
-				newUser = this.userService.createUser(userData);
+				newUser = this.userService.createUser(mapper.toEntity(element));
 
 				if(newUser != null) {
 					created.add(newUser); 
@@ -166,10 +182,13 @@ public class UserController {
 			}
 			
 			dto.setSuccess(created);
+			log.info("Users created: " + created.size());
 			dto.setFailed(notCreated);
+			log.info("Users failed: " + notCreated.size());
 			
 			response = ResponseEntity.ok(dto);
 		} else {
+			log.info("Invalid List of users");
 			response = ResponseEntity.badRequest().body("Send a List of Users");
 		}
 
