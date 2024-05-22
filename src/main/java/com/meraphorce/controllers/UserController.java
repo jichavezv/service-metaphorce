@@ -2,6 +2,7 @@ package com.meraphorce.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -97,18 +98,13 @@ public class UserController {
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
 		log.info("Get User[" + id + "]");
-		ResponseEntity<UserDTO> response = null;
-		User userData = this.userService.getUserById(id);
-
-		if(userData != null) {
-			response = ResponseEntity.ok(mapper.toDTO(userData));
-			log.info("User --> " + userData);
-		} else {
-			response = ResponseEntity.notFound().build();
-			log.info("User[" + id + "] not found");
-		}
-
-		return response; 
+		return userService.getUserById(id).map((User user) -> {
+			log.info("User found: " + user);
+			return ResponseEntity.ok(mapper.toDTO(user));
+		}).orElseGet(() -> {
+			log.warn("User not found: " + id);
+			return ResponseEntity.notFound().build();
+		});
 	}
 
 	/**

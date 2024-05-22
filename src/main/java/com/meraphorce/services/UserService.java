@@ -1,11 +1,11 @@
 package com.meraphorce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.respositories.UserRepository;
 
@@ -69,11 +69,11 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public User getUserById(String idValue) {
-    	User data = null;
+    public Optional<User> getUserById(String idValue) {
+    	Optional<User> data = null;
     	
     	try {
-			data = this.userRepository.findById(idValue).get();
+			data = this.userRepository.findById(idValue);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to get user [" + idValue + "] --> " + e);
