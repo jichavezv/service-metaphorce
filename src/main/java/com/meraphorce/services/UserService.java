@@ -91,18 +91,18 @@ public class UserService {
      * @since May/14/2024
      */
     public User updateUser(String idValue, User userUpdated) {
-    	User data = null;
+    	User userSaved = null;
     	
     	try {
 			userUpdated.setId(idValue);
 			
-			data = this.userRepository.saveAndFlush(userUpdated);
+			userSaved = this.userRepository.saveAndFlush(userUpdated);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to update user [" + idValue + "] --> " + e);
 		}
     	
-    	return data;
+    	return userSaved;
     }
     
     /**
