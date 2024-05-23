@@ -50,13 +50,12 @@ public class UserControllerTest {
 
 	@Test
 	public void testGetUserById() {
-		ResponseEntity<?> data = controller.getUser(userTest.getId());
-		Object dto = data.getBody();
+		ResponseEntity<UserDTO> data = controller.getUser(userTest.getId());
+		UserDTO dto = data.getBody();
 
 		assertNotNull(data);
 		assertNotNull(dto);
-		assertInstanceOf(UserDTO.class, dto);
-		assertEquals(((UserDTO) dto).getUserId(), this.userTest.getId());
+		assertEquals(dto.getUserId(), this.userTest.getId());
 	}
 
 	@Test
@@ -64,18 +63,17 @@ public class UserControllerTest {
 		userTest.setName("User Updated");
 		userTest.setEmail("new.email@web.com");
 
-		ResponseEntity<?> response = controller.updateUser(this.userTest.getId(), this.mapper.toDTO(userTest));
-		Object dto = response.getBody();
+		ResponseEntity<UserDTO> response = controller.updateUser(this.userTest.getId(), this.mapper.toDTO(userTest));
+		UserDTO dto = response.getBody();
 
 		assertNotNull(response);
 		assertNotNull(dto);
-		assertInstanceOf(UserDTO.class, dto);
-		assertEquals(((UserDTO) dto).getUserName(), this.userTest.getName());
+		assertEquals(dto.getUserName(), this.userTest.getName());
 	}
 
 	@Test
 	public void testDeleteUser() {
-		ResponseEntity<?> response = controller.deleteUser(userTest.getId());
+		ResponseEntity<Void> response = controller.deleteUser(userTest.getId());
 
 		Optional<User> userDeleted = service.getUserById(userTest.getId());
 		assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
@@ -97,26 +95,30 @@ public class UserControllerTest {
 			list.add(bulkUser);
 		}
 
-		ResponseEntity<?> response = controller.createUsersBulk(list);
-		Object dto = response.getBody();
-		log.info("El DTO: " + dto);
+		ResponseEntity<BulkResultDTO<UserDTO>> response = controller.createUsersBulk(list);
+		BulkResultDTO<UserDTO> dto = response.getBody();
 
 		assertNotNull(response);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertNotNull(dto);
-		assertInstanceOf(BulkResultDTO.class, dto);
 	}
 	
 	@Test
 	public void testGetUserNames() {
-		ResponseEntity<?> response = controller.getUsersName();
-		Object dto = response.getBody();
-		log.info("El DTO: " + dto);
+		ResponseEntity<List<String>> response = controller.getUsersName();
+		List<String> dto = response.getBody();
 		
 		assertNotNull(response);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 		assertNotNull(dto);
-		assertInstanceOf(List.class, dto);
+	}
+	
+	@Test
+	public void testFailedGetUserById() {
+		ResponseEntity<UserDTO> data = controller.getUser("user1");
+		UserDTO dto = data.getBody();
+		
+		assertNull(dto);
 	}
 
 }
