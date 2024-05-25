@@ -1,12 +1,11 @@
 package com.meraphorce.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.meraphorce.dto.UserDTO;
-import com.meraphorce.mapper.impl.UserMapper;
 import com.meraphorce.models.User;
 import com.meraphorce.respositories.UserRepository;
 
@@ -23,30 +22,25 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-    
-    private static UserMapper mapper = new UserMapper();
 
     /**
-     * Create a user from a DTO 
-     * @param user DTO with user data.
+     * Create a user 
+     * @param user Entity data.
      * @return User data inserted.
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public UserDTO createUser(UserDTO user) {
-    	UserDTO newUser = null;
+    public User createUser(User user) {
     	User data = null;
     	
-    	
     	try {
-			data = this.userRepository.save(mapper.toEntity(user));
-			newUser = mapper.toDTO(data);
+			data = this.userRepository.save(user);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to create user --> " + e);
 		}
     	
-        return newUser;
+        return data;
     }
 
     /**
@@ -55,22 +49,17 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public List<UserDTO> getAllUsers() {
-    	List<UserDTO> list = null;
+    public List<User> getAllUsers() {
     	List<User> data = null;
     	
     	try {
 			data = this.userRepository.findAll();
-			
-			if(data != null && !data.isEmpty()) {
-				list = data.stream().map(mapper::toDTO).toList();
-			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to get all users --> " + e);
 		}
     	
-        return list;
+        return data;
     }
     
     /**
@@ -80,22 +69,17 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public UserDTO getUserById(String idValue) {
-    	UserDTO user = null;
-    	User data = null;
+    public Optional<User> getUserById(String idValue) {
+    	Optional<User> data = null;
     	
     	try {
-			data = this.userRepository.findById(idValue).get();
-			
-			if(data != null) {
-				user = mapper.toDTO(data);
-			}
+			data = this.userRepository.findById(idValue);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to get user [" + idValue + "] --> " + e);
 		}
     	
-    	return user;
+    	return data;
     }
     
     /**
@@ -106,21 +90,19 @@ public class UserService {
      * @author Juan Chavez
      * @since May/14/2024
      */
-    public UserDTO updateUser(String idValue, UserDTO userUpdated) {
-    	UserDTO user = null;
-    	User data = null;
+    public User updateUser(String idValue, User userUpdated) {
+    	User userSaved = null;
     	
     	try {
-			userUpdated.setUserId(idValue);
+			userUpdated.setId(idValue);
 			
-			data = this.userRepository.saveAndFlush(mapper.toEntity(userUpdated));
-			user = mapper.toDTO(data);
+			userSaved = this.userRepository.saveAndFlush(userUpdated);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			log.warn("Error to update user [" + idValue + "] --> " + e);
 		}
     	
-    	return user;
+    	return userSaved;
     }
     
     /**
@@ -142,5 +124,15 @@ public class UserService {
 			// TODO Auto-generated catch block
 			log.warn("Error to delete user [" + idValue + "] --> " + e);
 		}
+    }
+    
+    /**
+     * Get all Users name in one transaction
+     * @return List of names
+     * @author Juan Chavez
+     * @since May/18/2024
+     */
+    public List<String> findAllUserNames() {
+    	return this.userRepository.getUserNames();
     }
 }
