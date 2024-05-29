@@ -3,7 +3,6 @@ package com.meraphorce.test.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -30,10 +29,11 @@ public class UserServiceTest {
 
 	@BeforeEach
 	public void setUp() {
-		userTest = service.createUser(new User().builder()
+		userTest = service.createUser(User.builder()
 				.id("user1")
 				.name("User One")
 				.email("user1@web.com")
+				.password("123456")
 				.build());
 	}
 
