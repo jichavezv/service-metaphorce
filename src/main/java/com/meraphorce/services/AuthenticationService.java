@@ -23,8 +23,7 @@ public class AuthenticationService implements UserDetailsService {
 	@Autowired
     private UserRepository repository;
     
-    @Autowired
-    private static UserAuthMapper mapper;
+    private static UserAuthMapper mapper = new UserAuthMapper();
     
     @Autowired
     private PasswordEncoder passwordEncoder;

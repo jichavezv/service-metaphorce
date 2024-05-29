@@ -4,17 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.meraphorce.models.User;
 import com.meraphorce.services.AuthenticationService;
 import com.meraphorce.services.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
+@Slf4j
 public class AuthServiceTest {
 	@Autowired
 	private AuthenticationService service;
@@ -27,7 +33,7 @@ public class AuthServiceTest {
 	@BeforeEach
 	public void setUp() {
 		userTest = userService.createUser(User.builder()
-				.name("UserOne")
+				.name("User" + new Random().nextInt(100))
 				.email("user1@web.com")
 				.password("123456")
 				.roles("admin,oper")
@@ -44,7 +50,15 @@ public class AuthServiceTest {
 	
 	@Test
 	public void testFailLoadUserByUsername() {
-		UserDetails data = service.loadUserByUsername("X");
+		UserDetails data = null;
+		
+		try {
+			data = service.loadUserByUsername("X");
+		} catch (UsernameNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			log.info("Error --> " + e);
+		}
 
 		assertNull(data);
 	}

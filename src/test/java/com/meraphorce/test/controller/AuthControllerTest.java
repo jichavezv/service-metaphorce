@@ -35,8 +35,10 @@ public class AuthControllerTest {
 	@BeforeEach
 	public void setUp() {
 		userService.createUser(User.builder()
-				.name("User One")
+				.name("UserOne")
 				.email("user1@web.com")
+				.password("123456")
+				.roles("admin,oper")
 				.build());
 	}
 	
@@ -69,7 +71,7 @@ public class AuthControllerTest {
 	@Test
 	public void testLogin() {
 		ResponseEntity<LoginResponseDTO> response = controller.authenticate(LoginUserDTO.builder()
-				.name("NewUser")
+				.name("UserOne")
 				.password("123456")
 				.build());
 		
