@@ -2,10 +2,8 @@ package com.meraphorce.test.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,6 @@ import com.meraphorce.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
-@Slf4j
 public class UserControllerTest {
 	@Autowired
 	private UserController controller;
@@ -39,7 +36,7 @@ public class UserControllerTest {
 	private User userTest;
 
 	private UserMapper mapper = new UserMapper();
-
+	
 	@BeforeEach
 	public void setUp() {
 		userTest = service.createUser(new User().builder()

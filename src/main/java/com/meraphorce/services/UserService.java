@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.meraphorce.models.User;
@@ -22,6 +23,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder encoder;
 
     /**
      * Create a user 
@@ -34,6 +38,7 @@ public class UserService {
     	User data = null;
     	
     	try {
+    		user.setPassword(encoder.encode(user.getPassword()));
 			data = this.userRepository.save(user);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
