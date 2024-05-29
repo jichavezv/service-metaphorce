@@ -18,6 +18,7 @@ public class UserMapper implements IMapper<User, UserDTO> {
 				.id(dtoValue.getUserId())
 				.name(dtoValue.getUserName())
 				.email(dtoValue.getUserEmail())
+				.password(dtoValue.getPassword())
 				.build();
 	}
 
