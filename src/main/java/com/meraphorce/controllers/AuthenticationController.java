@@ -97,13 +97,14 @@ public class AuthenticationController {
 		if (authentication.isAuthenticated()) {
 			String token = jwtService.generateToken(loginUserDto.getName());
 			long expiration = jwtService.extractExpiration(token).getTime();
+			log.debug("Authenticated: " + token + " - " + expiration);
 			return ResponseEntity.ok(LoginResponseDTO.builder()
 					.token(token)
 					.expiration(expiration)
 					.build());
 		} else {
-			throw new UsernameNotFoundException("Invalid user request!");
-		}
+			log.info("User not authenticated: " + loginUserDto);
+			throw new UsernameNotFoundException("Invalid user request!");		}
 	}
 
 
