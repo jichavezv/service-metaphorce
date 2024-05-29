@@ -14,13 +14,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Encapsulates Authentication data 
+ * @author Juan Chavez
+ * @since May/29/2024
+ */
 @Builder
 @Getter
 @Setter
 public class UserAuthDTO implements UserDetails {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull

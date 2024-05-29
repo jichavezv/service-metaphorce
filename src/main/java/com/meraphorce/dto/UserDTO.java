@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Class to encapsulate the User data
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

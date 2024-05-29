@@ -26,6 +26,11 @@ import com.meraphorce.services.JwtService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Endpoints for Authentication on API
+ * @author Juan Chavez
+ * @since May/29/2024
+ */
 @RequestMapping("/api/v1/auth")
 @RestController
 @Slf4j
@@ -43,11 +48,24 @@ public class AuthenticationController {
 	@Autowired
     private AuthenticationManager authenticationManager;
 
+	/**
+	 * Endpoint for test 
+	 * @return Welcome Message
+	 * @author Juan Chavez
+	 * @since May/29/2024
+	 */
 	@GetMapping("/welcome")
 	public String welcome() {
 		return "This endpoint is not secure yet";
 	}
 
+	/**
+	 * Endpoint with Post method to add user for Authentication on API
+	 * @param registerUserDto Resgister data
+	 * @return User Data register
+	 * @author Juan Chavez
+	 * @since May/29/2024
+	 */
 	@PostMapping("/signup")
 	public ResponseEntity<UserDTO> register(@Valid @RequestBody UserAuthDTO registerUserDto) {
 		log.info("User to register: " + registerUserDto);
@@ -65,6 +83,13 @@ public class AuthenticationController {
 		return response;
 	}
 
+	/**
+	 * Endpoint to login a User 
+	 * @param loginUserDto Login data
+	 * @return Token for Authorization
+	 * @author Juan Chavez
+	 * @since May/29/2024 
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponseDTO> authenticate(@Valid @RequestBody LoginUserDTO loginUserDto) {
 		Authentication authentication = authenticationManager.authenticate(

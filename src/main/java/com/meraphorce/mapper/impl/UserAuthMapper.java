@@ -9,6 +9,11 @@ import com.meraphorce.dto.auth.UserAuthDTO;
 import com.meraphorce.mapper.IMapper;
 import com.meraphorce.models.User;
 
+/**
+ * Class to convert User Entity to UserAuthDTO
+ * @author Juan Chavez
+ * @since May/29/2024
+ */
 public class UserAuthMapper implements IMapper<User, UserAuthDTO> {
 
 	@Override

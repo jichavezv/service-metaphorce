@@ -18,6 +18,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Filter for each request on API to authenticate a User
+ * @author Juan Chavez
+ * @since May/29/2024
+ */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 	@Autowired
