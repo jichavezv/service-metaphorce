@@ -1,6 +1,5 @@
-package com.meraphorce.dto;
+package com.meraphorce.dto.auth;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -11,22 +10,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Class to encapsulate the User data
+ * Class for Login
+ * @author Juan Chavez
+ * @since May/28/2024
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Setter
-public class UserDTO {
-	private String userId;
+public class LoginUserDTO {
+	@NotNull
+	@NotBlank
+	private String name;
 	
 	@NotNull
 	@NotBlank
-	private String userName;
-	
-	@Email
-	private String userEmail;
-	
 	private String password;
 }
