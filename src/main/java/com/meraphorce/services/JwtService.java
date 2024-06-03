@@ -1,6 +1,8 @@
 package com.meraphorce.services;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -24,6 +26,9 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 	@Value("${security.jwt.secret-key}")
 	private String secretKey;
+	
+	@Value("${security.jwt.expiration}")
+	private long expiration;
 
 	/**
 	 * Generate Token for Authentication
@@ -44,11 +49,15 @@ public class JwtService {
 	 * @since May/28/2024
 	 */
 	private String buildToken(String userName) {
+		LocalDateTime currentTime = LocalDateTime.now();
+				
 		return Jwts.builder()
 				.setClaims(new HashMap<>())
 				.setSubject(userName)
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+				.setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
+				.setExpiration(Date.from(currentTime
+		              .plusMinutes(System.currentTimeMillis() + expiration)
+		              .atZone(ZoneId.systemDefault()).toInstant()))
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
 	}
 
